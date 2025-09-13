@@ -113,6 +113,47 @@ Returns mock JSON (see sample below) if no API key.
 `POST /api/mistra/chat` with `{ "message": "What is a good degree for AI?" }`.
 Returns `{ "reply": "Mock response about: ..." }` unless real API key present.
 
+## 🌐 Using a Real Mistra API
+When you provide a valid `MISTRA_API_KEY` and `MISTRA_API_URL` in `server/.env` the backend will:
+- Call the Mistra API for both `/api/mistra/recommend` and `/api/mistra/chat`.
+- Attempt to parse JSON directly. If the model returns narrative text containing a JSON block, it extracts the first `{ ... }` segment.
+- For recommendations you should instruct your model (system prompt already does) to output ONLY JSON matching:
+```jsonc
+{
+  "recommended_streams": ["Engineering"],
+  "recommended_degrees": [
+    {
+      "name": "B.Tech Computer Engineering",
+      "description": "...",
+      "average_salary_range": "4-12 LPA",
+      "key_job_roles": ["Software Developer"],
+      "government_exams": ["GATE"],
+      "growth_outlook": "..."
+    }
+  ],
+  "suggested_colleges": ["College A"],
+  "next_steps": ["Step 1", "Step 2"]
+}
+```
+
+### Environment Setup Example
+Create `server/.env`:
+```env
+PORT=4000
+MISTRA_API_URL=https://api.mistra.example/v1/generate
+MISTRA_API_KEY=sk_live_your_real_key
+```
+
+Restart the server after adding the key. If responses are not JSON, check server logs and refine the system instruction to force strict JSON.
+
+### Error Handling
+- Timeout: 30s default (returns `Mistra request timed out`).
+- Non-200: surfaces first 300 chars of response body.
+- Malformed JSON: falls back to `{ raw: "...original text..." }` for recommendations, or raw text for chat.
+
+### Improving Reliability (Optional)
+Consider adding: retries with exponential backoff, JSON schema validation (Zod), structured logging, and streaming responses for the chat endpoint (SSE/WebSockets).
+
 ## 🧪 Sample Mistra JSON (Mock)
 See end of this README for a full example; used by frontend to render recommendations.
 

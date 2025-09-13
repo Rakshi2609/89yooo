@@ -19,8 +19,9 @@ export default function Chatbot(){
     setLoading(true);
     try {
       const res = await chat(input.trim());
-      setMessages(m => [...m, { role:'bot', content: res.reply || JSON.stringify(res)}]);
-    } catch(e) { setMessages(m => [...m, { role:'bot', content: 'Error: '+e.message }]); }
+      const isMock = /mock/i.test(res.reply || '') || res.reply === '(Fallback) Unable to reach AI service right now; check MISTRA_API_URL DNS.';
+      setMessages(m => [...m, { role:'bot', content: res.reply || JSON.stringify(res), meta: { mock: isMock } }]);
+    } catch(e) { setMessages(m => [...m, { role:'bot', error:true, content: '⚠️ ' + e.message }]); }
     finally { setLoading(false); }
   };
 
@@ -35,7 +36,10 @@ export default function Chatbot(){
             <div className="px-4 py-3 font-semibold bg-gradient-to-r from-primary/20 to-accent/20">CareerPath Chat</div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
               {messages.map((m,i)=>(
-                <div key={i} className={`px-3 py-2 rounded-xl max-w-[85%] ${m.role==='user'?'ml-auto bg-primary text-white':'bg-surface shadow'}`}>{m.content}</div>
+                <div key={i} className={`px-3 py-2 rounded-xl max-w-[85%] whitespace-pre-wrap ${m.role==='user'?'ml-auto bg-primary text-white': m.error ? 'bg-red-500/10 border border-red-400 text-red-600 dark:text-red-300' : 'bg-surface shadow'}`}>
+                  {m.content}
+                  {m.meta?.mock && !m.error && <span className="block mt-1 text-[10px] uppercase tracking-wide text-softText">Mock / Fallback</span>}
+                </div>
               ))}
               {loading && <div className="text-xs text-softText">Thinking...</div>}
               <div ref={bottomRef} />
