@@ -6,12 +6,23 @@ async function http(path, options={}) {
     headers: { 'Content-Type': 'application/json', ...(token? { Authorization: 'Bearer '+token }: {}) },
     ...options
   });
-  if (!res.ok) throw new Error('Request failed');
-  return res.json();
+  let data;
+  try { data = await res.json(); }
+  catch { data = null; }
+  if (!res.ok) {
+    const detail = data?.error || data?.message || res.status + ' ' + res.statusText;
+    throw new Error('Request failed: ' + detail);
+  }
+  return data;
 }
 
 export async function login(email, password){
   return http('/auth/login', { method:'POST', body: JSON.stringify({ email, password })});
+}
+
+
+export async function googleLogin(payload){
+  return http('/auth/google', { method: 'POST', body: JSON.stringify(payload) });
 }
 
 export async function recommend(payload){
