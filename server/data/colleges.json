@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "Government Engineering College A",
+    "district": "Pune",
+    "courses": ["B.Tech Computer", "B.Tech Mechanical"],
+    "cutoffs": {"computer": 92, "mechanical": 85},
+    "facilities": ["Hostel", "Library", "Sports Complex"],
+    "exams": ["JEE Main", "MHT-CET"]
+  },
+  {
+    "id": 2,
+    "name": "Government Arts & Science College B",
+    "district": "Mumbai",
+    "courses": ["B.Sc Physics", "BA Economics"],
+    "cutoffs": {"physics": 88, "economics": 81},
+    "facilities": ["Laboratories", "Auditorium"],
+    "exams": ["HSC"]
+  },
+  {
+    "id": 3,
+    "name": "Government Polytechnic Institute C",
+    "district": "Nashik",
+    "courses": ["Diploma Civil", "Diploma Electrical"],
+    "cutoffs": {"civil": 75, "electrical": 78},
+    "facilities": ["Workshops", "Library"],
+    "exams": ["SSC"]
+  },
+  {
+    "id": 4,
+    "name": "Government Medical College D",
+    "district": "Nagpur",
+    "courses": ["MBBS", "B.Sc Nursing"],
+    "cutoffs": {"mbbs": 96, "nursing": 83},
+    "facilities": ["Hospital", "Hostel"],
+    "exams": ["NEET"]
+  },
+  {
+    "id": 5,
+    "name": "Government Commerce College E",
+    "district": "Pune",
+    "courses": ["B.Com", "BBA"],
+    "cutoffs": {"bcom": 80, "bba": 82},
+    "facilities": ["Library", "Placement Cell"],
+    "exams": ["HSC"]
+  },
+  {
+    "id": 6,
+    "name": "Government Agriculture College F",
+    "district": "Kolhapur",
+    "courses": ["B.Sc Agriculture", "Diploma Agri"],
+    "cutoffs": {"bscagri": 85, "diploma": 70},
+    "facilities": ["Research Farm", "Labs"],
+    "exams": ["MHT-CET"]
+  }
+]

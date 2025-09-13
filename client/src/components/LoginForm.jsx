@@ -1,0 +1,43 @@
+import React, { useState } from 'react';
+import { login } from '../services/api/mistra.js';
+import { useNavigate } from 'react-router-dom';
+
+export default function LoginForm(){
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [error,setError] = useState('');
+  const [loading,setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      const res = await login(email, password);
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('user', JSON.stringify(res.user));
+      navigate('/');
+    } catch(e){ setError(e.message); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    <div className="max-w-md mx-auto card">
+      <h2 className="h2 mb-4">Login</h2>
+      <form onSubmit={submit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-semibold mb-1">Email</label>
+            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-1">Password</label>
+            <input type="password" value={password} onChange={e=>setPassword(e.target.value)} required />
+        </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <button disabled={loading} className="btn w-full">{loading? 'Logging in...' : 'Login'}</button>
+      </form>
+      <p className="text-xs text-softText mt-4">Demo: any email & password works. Token stored in localStorage.</p>
+    </div>
+  );
+}
