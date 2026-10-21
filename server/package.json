@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "node api.js && node server/index.js"
+    "dev": "node server/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
